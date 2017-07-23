@@ -1,8 +1,9 @@
 #include<Servo.h>
 
-#define SERVO1 9
+#define SERVO1 8
 #define SERVO2 10
-#define SOLENOID 2
+#define SOLENOID1 2
+#define SOLENOID2 4
 
 Servo servo1, servo2;
 int counter = 0, time;//カウンタ変数,ディレイ時間
@@ -16,33 +17,35 @@ void setup(){
   Serial.begin(9600);
   servo1.attach(SERVO1);
   servo2.attach(SERVO2);
-  pinMode(SOLENOID, OUTPUT);
+  pinMode(SOLENOID1, OUTPUT);
 }
 
 void loop(){
+  time = 250;
+
   if(Serial.available() > -1){
     if(counter++ == 0){
-      //    key = Serial.read();
-      //    M_m = Serial.read();
-      //
-      //    if(key == 'D' && M_m == 'M' || key == 'B' && M_m == 'm'){
-      //      D_M++;
-      //    }
-      //    else if(key == 'E' && M_m == 'M' || key == 'c' && M_m == 'm'){
-      //      E_M++;
-      //    }
-      //    else if(key == 'F' && M_m == 'M' || key == 'D' && M_m == 'm'){
-      //      F_M++;
-      //    }
-      //    else if(key == 'G' && M_m == 'M' || key == 'E' && M_m == 'm'){
-      //      G_M++;
-      //    }
-      //    else if(key == 'A' && M_m == 'M' || key == 'f' && M_m == 'm'){
-      //      A_M++;
-      //    }
-      //    else if(key == 'B' && M_m == 'M' || key == 'g' && M_m == 'm'){
-      //      B_M++;
-      //    }
+          key = Serial.read();
+          M_m = Serial.read();
+
+          if(key == 'D' && M_m == 'M' || key == 'B' && M_m == 'm'){
+            D_M++;
+          }
+          else if(key == 'E' && M_m == 'M' || key == 'c' && M_m == 'm'){
+            E_M++;
+          }
+          else if(key == 'F' && M_m == 'M' || key == 'D' && M_m == 'm'){
+            F_M++;
+          }
+          else if(key == 'G' && M_m == 'M' || key == 'E' && M_m == 'm'){
+            G_M++;
+          }
+          else if(key == 'A' && M_m == 'M' || key == 'f' && M_m == 'm'){
+            A_M++;
+          }
+          else if(key == 'B' && M_m == 'M' || key == 'g' && M_m == 'm'){
+            B_M++;
+          }
     }
     else{
       note = Serial.read();
@@ -143,13 +146,21 @@ void loop(){
       //角度を決める
       angle1 = 180 - 7.5 * mag;
       angle2 = angle1 - 82.5;
-      //サーボを動かす
+
+      //サーボとソレノイドを動かす
       if(oct == '4'){
         servo1.write(angle1);
+        digitalWrite(SOLENOID1, HIGH)
+        delay(time);
+        digitalWrite(SOLENOID1, LOW)
       }
       else if(oct == '5'){
         servo2.write(angle2);
+        digitalWrite(SOLENOID2, HIGH)
+        delay(time);
+        digitalWrite(SOLENOID2, LOW)
       }
+
 
       //ディレイ時間を決める
       switch(note){
